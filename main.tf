@@ -46,8 +46,8 @@ resource "aws_iam_role" "controlplane" {
 }
 
 resource "aws_iam_instance_profile" "controlplane" {
-  name = format("%s-controlplane", var.name)
-  role = aws_iam_role.controlplane.name
+  name_prefix = format("%s-controlplane", var.name)
+  role        = aws_iam_role.controlplane.name
 }
 
 resource "aws_iam_role_policy_attachment" "controlplane_policy_attachments" {
@@ -81,8 +81,8 @@ resource "aws_iam_role" "worker" {
 }
 
 resource "aws_iam_instance_profile" "worker" {
-  name = format("%s-worker", var.name)
-  role = aws_iam_role.worker.name
+  name_prefix = format("%s-worker", var.name)
+  role        = aws_iam_role.worker.name
 }
 
 locals {
