@@ -12,7 +12,9 @@ data "aws_iam_policy_document" "ec2_assume_role" {
 # controlplane iam configuration
 data "aws_iam_policy_document" "controlplane" {
   statement {
-    actions = [
+    sid       = "StorageClassEBS"
+    effect    = "Allow"
+    actions   = [
       "ec2:AttachVolume",
       "ec2:DetachVolume",
       "ec2:CreateVolume",
@@ -20,11 +22,34 @@ data "aws_iam_policy_document" "controlplane" {
       "ec2:DescribeInstances",
       "ec2:DescribeVolumes",
       "ec2:CreateTags",
-      "elasticloadbalancing:*",
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeAutoScalingInstances",
     ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid       = "ServiceELB"
     effect    = "Allow"
+    actions   = [
+      "elasticloadbalancing:*",
+      "ec2:DescribeRegions",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSecurityGroupReferences",
+      "ec2:DescribeStaleSecurityGroups",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeRouteTables",
+      "ec2:AuthorizeSecurityGroupEgress",
+      "ec2:AuthorizeSecurityGroupIngress",
+      "ec2:DeleteSecurityGroup",
+      "ec2:RevokeSecurityGroupEgress",
+      "ec2:RevokeSecurityGroupIngress",
+      "ec2:CreateSecurityGroup",
+      "ec2:DescribeAccountAttributes",
+      "ec2:DescribeAddresses",
+      "ec2:DescribeInternetGateways"
+    ]
     resources = ["*"]
   }
 }
@@ -60,11 +85,34 @@ resource "aws_iam_role_policy_attachment" "controlplane_policy_attachments" {
 # worker iam configuration
 data "aws_iam_policy_document" "worker" {
   statement {
-    actions = [
+    sid       = "AWSCloudProviderWorkerMinimum"
+    actions   = [
       "ec2:DescribeInstances",
     ]
     effect    = "Allow"
     resources = ["*"]
+  }
+
+  statement {
+    sid       = "ExternalDNSControllerWrite"
+    effect    = "Allow"
+    actions   = [
+      "route53:ChangeResourceRecordSets"
+    ]
+    resources = [
+      for i in var.route53_zone_ids:
+        format("arn:aws:route53:::hostedzone/%s", i)
+    ]
+  }
+
+  statement {
+   sid        = "ExternalDNSControllerRead"
+   effect     = "Allow"
+   actions    = [
+     "route53:ListHostedZones",
+     "route53:ListResourceRecordSets"
+   ]
+   resources = ["*"]
   }
 }
 
@@ -91,6 +139,6 @@ locals {
 
 resource "aws_iam_role_policy_attachment" "worker_policy_attachments" {
   count = var.count_worker_additional_policy_attachments + 1
-  role       = aws_iam_role.controlplane.name
+  role       = aws_iam_role.worker.name
   policy_arn = local.worker_policy_arns[count.index]
 }

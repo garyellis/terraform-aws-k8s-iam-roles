@@ -27,6 +27,12 @@ variable "count_worker_additional_policy_attachments" {
   default = 0
 }
 
+variable "route53_zone_ids" {
+  description = "A list of route53 zone ids for External DNS controller to manage"
+  type = list(string)
+  default = ["PLACEHOLDER"]
+}
+
 variable "tags" {
   description = "A map of tags to create on taggable resources"
   type = map(string)

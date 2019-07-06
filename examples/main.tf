@@ -1,7 +1,8 @@
 module "iam_roles" {
   source = "../"
 
-  name = "tf-k8s-iam-roles"
+  name               = "tf-k8s-iam-roles"
+  #external_dns_zones = ["ZOXXXXX", "Z3XXXXXX"]
 }
 
 output "controlplane" {

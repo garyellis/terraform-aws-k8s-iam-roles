@@ -21,6 +21,7 @@ This terraform module creates kubernetes aws cloud provider iam configuration. I
 | controlplane\_additional\_policy\_attachments | a list of iam policy arns attached to the controlplane iam role| `list(string)` | `[]` | no |
 | worker\_additional\_policy\_attachments | a list of iam policy arns attached to the worker iam role| `list(string)` | `[]` | no |
 | count\_worker\_additional\_policy\_attachments | the count of arns in the `worker\_additional\_policy\_attachments` list | `number` | `0` | no |
+| route53\_zone\_ids | a list of route53 zone ids for External DNS controller to manage | `list(string)` | `["PLACEHOLDER"]` | no |
 | tags | a map of tags to create on taggable resources | `map(string)` | `{}` | no |
 
 ## Outputs
