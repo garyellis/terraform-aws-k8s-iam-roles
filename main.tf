@@ -30,8 +30,8 @@ data "aws_iam_policy_document" "controlplane" {
 }
 
 resource "aws_iam_policy" "controlplane" {
-  name   = format("%s-controlplane", var.name)
-  policy = data.aws_iam_policy_document.controlplane.json
+  name_prefix   = format("%s-controlplane", var.name)
+  policy        = data.aws_iam_policy_document.controlplane.json
 }
 
 locals {
@@ -69,8 +69,8 @@ data "aws_iam_policy_document" "worker" {
 }
 
 resource "aws_iam_policy" "worker" {
-  name   = format("%s-worker", var.name)
-  policy = data.aws_iam_policy_document.worker.json
+  name_prefix   = format("%s-worker", var.name)
+  policy        = data.aws_iam_policy_document.worker.json
 }
 
 resource "aws_iam_role" "worker" {
