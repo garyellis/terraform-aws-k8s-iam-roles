@@ -4,10 +4,10 @@ module "iam_roles" {
   name = "tf-k8s-iam-roles"
 }
 
-output "controlplane_arn" {
+output "controlplane" {
   value = module.iam_roles.controlplane
 }
 
-output "worker_arn" {
+output "worker" {
   value = module.iam_roles.worker
 }

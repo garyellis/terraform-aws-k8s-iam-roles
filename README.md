@@ -27,5 +27,5 @@ This terraform module creates kubernetes aws cloud provider iam configuration. I
 
 | Name | Description | Type |
 |------|-------------|:------:|
-| controlplane |  the control plane iam role resource | `object` |
-| worker | the worker iam role resource  | `object` |
+| controlplane |  the control plane iam instance profile resource | `object` |
+| worker | the worker iam instance profile role resource  | `object` |
